@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head><base target="_top"></head>
+  <body>
+    <form onsubmit="saveSettings(); return false;">
+      <label><input type="checkbox" id="removeInvisible"> Remove invisible characters</label><br>
+      <label><input type="checkbox" id="fixSpaces"> Normalise weird spaces</label><br>
+      <label><input type="checkbox" id="removeDirectional"> Remove directional control marks</label><br><br>
+      <input type="submit" value="Save">
+    </form>
+
+    <script>
+      // Pre-fill checkboxes from stored settings
+      google.script.run.withSuccessHandler(function(settings) {
+        document.getElementById('removeInvisible').checked = settings.removeInvisible;
+        document.getElementById('fixSpaces').checked = settings.fixSpaces;
+        document.getElementById('removeDirectional').checked = settings.removeDirectional;
+      }).getCleanerSettings();
+
+      function saveSettings() {
+        const settings = {
+          removeInvisible: document.getElementById('removeInvisible').checked,
+          fixSpaces: document.getElementById('fixSpaces').checked,
+          removeDirectional: document.getElementById('removeDirectional').checked
+        };
+        google.script.run.withSuccessHandler(() => google.script.host.close())
+                         .saveCleanerSettings(settings);
+      }
+    </script>
+  </body>
+</html>
